@@ -3,9 +3,793 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website</title>
+    <title>Princesa - Cocina Cultura | Authentic 19th-Century Puerto Rican Cuisine</title>
+    <meta name="description" content="Experience authentic 19th-century Puerto Rican cuisine in a magical garden setting. Featuring Puerto Rico's most extensive rum collection and farm-to-table dining in Old San Juan.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            color: #1a2a24;
+            overflow-x: hidden;
+            position: relative;
+            background: #F7F5F2;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+        }
+
+        /* Botanical Animated Background */
+        .botanical-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #F7F5F2 0%, #FFFFFF 50%, #EAE0D5 100%);
+            overflow: hidden;
+        }
+
+        /* Animated gradient waves */
+        .botanical-background::before,
+        .botanical-background::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(26, 42, 36, 0.03) 0%, transparent 70%);
+            animation: wave 25s ease-in-out infinite;
+        }
+
+        .botanical-background::before {
+            top: -50%;
+            left: -50%;
+            animation-delay: 0s;
+        }
+
+        .botanical-background::after {
+            bottom: -50%;
+            right: -50%;
+            animation-delay: -12s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translate(40px, -40px) rotate(120deg) scale(1.15);
+            }
+            66% {
+                transform: translate(-30px, 30px) rotate(240deg) scale(0.9);
+            }
+        }
+
+        /* Canvas for botanical particles */
+        #botanicalCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Hero Section */
+        .hero-overlay {
+            background: linear-gradient(180deg, rgba(26, 42, 36, 0.7) 0%, rgba(26, 42, 36, 0.5) 100%);
+        }
+
+        /* Navigation Styles */
+        nav {
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: #1a2a24 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fade-in animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Button Styles */
+        .btn-gold {
+            background: #D4AF37;
+            color: #1a2a24;
+            padding: 14px 32px;
+            border-radius: 2px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            border: 2px solid #D4AF37;
+        }
+
+        .btn-gold:hover {
+            background: transparent;
+            color: #D4AF37;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #D4AF37;
+            border: 2px solid #D4AF37;
+            padding: 14px 32px;
+            border-radius: 2px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            background: #D4AF37;
+            color: #1a2a24;
+            transform: translateY(-2px);
+        }
+
+        /* Image hover effects */
+        .image-hover {
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        .image-hover img {
+            transition: transform 0.6s ease;
+        }
+
+        .image-hover:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Rum bottle hover effect */
+        .rum-bottle-image {
+            transition: all 0.4s ease;
+        }
+
+        .rum-bottle-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 25px rgba(212, 175, 55, 0.7);
+        }
+
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+
+        /* Decorative divider */
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: #D4AF37;
+            margin: 20px auto;
+        }
+
+        /* Newsletter input */
+        input[type="email"] {
+            background: rgba(234, 224, 213, 0.1);
+            border: 1px solid rgba(234, 224, 213, 0.3);
+            color: #EAE0D5;
+            padding: 12px 16px;
+            border-radius: 2px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus {
+            border-color: #D4AF37;
+            background: rgba(234, 224, 213, 0.15);
+        }
+
+        input[type="email"]::placeholder {
+            color: rgba(234, 224, 213, 0.6);
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Grid animations */
+        .grid-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .grid-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F7F5F2;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c19d2f;
+        }
+    </style>
 </head>
 <body>
-    <!-- Content will be added here -->
+
+    <!-- Botanical Animated Background -->
+    <div class="botanical-background" id="botanicalBg">
+        <canvas id="botanicalCanvas"></canvas>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 py-4 px-6 md:px-12 bg-transparent" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#home" class="flex items-center">
+                <img src="./assets/image_2.png" alt="Princesa Logo" class="h-12 md:h-16">
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center space-x-8">
+                <a href="#story" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">Our Story</a>
+                <a href="#menu" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">The Menu</a>
+                <a href="#rum" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">Rum Library</a>
+                <a href="#farm" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">Finca La Zafra</a>
+                <a href="#events" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">Events</a>
+                <a href="#contact" class="text-white hover:text-[#D4AF37] transition-colors duration-300 font-light">Contact</a>
+                <a href="#contact" class="btn-gold">Reservations</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-white" id="mobileMenuBtn">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu lg:hidden bg-[#1a2a24] mt-4" id="mobileMenu">
+            <div class="flex flex-col space-y-4 p-6">
+                <a href="#story" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">Our Story</a>
+                <a href="#menu" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">The Menu</a>
+                <a href="#rum" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">Rum Library</a>
+                <a href="#farm" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">Finca La Zafra</a>
+                <a href="#events" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">Events</a>
+                <a href="#contact" class="text-[#EAE0D5] hover:text-[#D4AF37] transition-colors duration-300">Contact</a>
+                <a href="#contact" class="btn-gold text-center">Reservations</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center">
+        <div class="absolute inset-0 z-0">
+            <img src="./assets/image_11.jpg" alt="Princesa Garden" class="w-full h-full object-cover">
+            <div class="hero-overlay absolute inset-0"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 hero-text fade-in-up">
+            <h1 class="text-5xl md:text-7xl text-white mb-6 font-light tracking-wide">Taste Puerto Rico's History</h1>
+            <p class="text-xl md:text-2xl text-[#EAE0D5] mb-10 font-light">An authentic 19th-century culinary journey</p>
+            <a href="#contact" class="btn-gold text-lg">Reserve Your Table</a>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section id="story" class="py-24 px-6 md:px-12 bg-[#F7F5F2]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center content-section">
+                <div class="image-hover rounded-sm overflow-hidden">
+                    <img src="./assets/image_8.jpg" alt="Historic Building" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h2 class="text-5xl mb-4 text-[#1a2a24]">Our Story</h2>
+                    <div class="divider mx-0"></div>
+                    <p class="text-lg text-[#5E6D68] mb-6 leading-relaxed">
+                        Nestled along the historic Paseo de la Princesa in Old San Juan, Princesa - Cocina Cultura is more than a restaurant—it's a journey through time.
+                    </p>
+                    <p class="text-lg text-[#5E6D68] mb-6 leading-relaxed">
+                        We are the only restaurant in Puerto Rico dedicated to reviving and presenting authentic recipes from 19th-century Puerto Rican cookbooks (1859-1950). Each dish tells a story of our island's rich culinary heritage, prepared with techniques and flavors that have been carefully preserved through generations.
+                    </p>
+                    <p class="text-lg text-[#5E6D68] mb-8 leading-relaxed">
+                        Our enchanting garden setting, embraced by over 20 trees and bonded to a centuries-old wall, creates a magical atmosphere where history comes alive with every bite.
+                    </p>
+                    <a href="#menu" class="btn-outline">Explore Our Menu</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Showcase Section -->
+    <section id="menu" class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto text-center content-section">
+            <h2 class="text-5xl mb-4 text-[#1a2a24]">Elevated Puerto Rican Cuisine</h2>
+            <div class="divider"></div>
+            <p class="text-xl text-[#5E6D68] mb-16 max-w-3xl mx-auto">
+                Every dish is a celebration of Puerto Rican history, crafted with ingredients from our own agroecological farm and local producers.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="grid-item image-hover rounded-sm overflow-hidden">
+                    <img src="./assets/image_0.jpg" alt="Traditional Puerto Rican Dish" class="w-full h-80 object-cover">
+                    <div class="p-6 bg-[#F7F5F2]">
+                        <h3 class="text-2xl mb-2 text-[#1a2a24]">Historic Recipes</h3>
+                        <p class="text-[#5E6D68]">Authentic flavors from 19th-century Puerto Rican cookbooks</p>
+                    </div>
+                </div>
+
+                <div class="grid-item image-hover rounded-sm overflow-hidden" style="transition-delay: 0.1s;">
+                    <img src="./assets/image_6.jpg" alt="Gourmet Dish" class="w-full h-80 object-cover">
+                    <div class="p-6 bg-[#F7F5F2]">
+                        <h3 class="text-2xl mb-2 text-[#1a2a24]">Farm Fresh</h3>
+                        <p class="text-[#5E6D68]">Ingredients sourced from our agroecological farm</p>
+                    </div>
+                </div>
+
+                <div class="grid-item image-hover rounded-sm overflow-hidden" style="transition-delay: 0.2s;">
+                    <img src="./assets/image_9.jpg" alt="Atmospheric Dining" class="w-full h-80 object-cover">
+                    <div class="p-6 bg-[#F7F5F2]">
+                        <h3 class="text-2xl mb-2 text-[#1a2a24]">Magical Ambiance</h3>
+                        <p class="text-[#5E6D68]">Dine in our enchanting garden setting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rum Library Section -->
+    <section id="rum" class="py-24 px-6 md:px-12 bg-[#1a2a24] text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center content-section">
+                <div>
+                    <h2 class="text-5xl mb-4">The Rum Library</h2>
+                    <div class="divider mx-0 bg-[#D4AF37]"></div>
+                    <p class="text-lg text-[#EAE0D5] mb-6 leading-relaxed">
+                        Discover one of the most extensive collections of Puerto Rican rum in existence. Our carefully curated selection spans centuries of distilling tradition, from rare vintage bottles to contemporary masterpieces.
+                    </p>
+                    <p class="text-lg text-[#EAE0D5] mb-6 leading-relaxed">
+                        Each rum tells a story of Puerto Rico's sugar cane heritage, master distillers' artistry, and the evolution of Caribbean spirits. Whether you're a connoisseur or curious beginner, our knowledgeable staff will guide you through an unforgettable tasting experience.
+                    </p>
+                    <p class="text-lg text-[#EAE0D5] mb-8 leading-relaxed">
+                        Pair your meal with a perfectly selected rum, or join us for a dedicated tasting session to explore the depth and complexity of Puerto Rican rum-making tradition.
+                    </p>
+                    <a href="#contact" class="btn-gold">Book a Tasting</a>
+                </div>
+                <div class="image-hover rounded-sm overflow-hidden rum-bottle-image">
+                    <img src="./assets/image_7.jpg" alt="Rum Collection" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finca La Zafra Section -->
+    <section id="farm" class="py-24 px-6 md:px-12 bg-[#F7F5F2]">
+        <div class="max-w-7xl mx-auto text-center content-section">
+            <h2 class="text-5xl mb-4 text-[#1a2a24]">Finca La Zafra</h2>
+            <div class="divider"></div>
+            <p class="text-xl text-[#5E6D68] mb-8 max-w-3xl mx-auto">
+                Our commitment to authenticity extends from our kitchen to the soil. At Finca La Zafra, our agroecological farm, we grow many of the ingredients that grace your plate.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mt-16">
+                <div class="image-hover rounded-sm overflow-hidden">
+                    <img src="./assets/image_10.jpg" alt="Farm Setting" class="w-full h-96 object-cover">
+                </div>
+                <div class="text-left">
+                    <h3 class="text-3xl mb-4 text-[#1a2a24]">Farm-to-Table Philosophy</h3>
+                    <p class="text-lg text-[#5E6D68] mb-4 leading-relaxed">
+                        Our agroecological approach respects the land and honors traditional farming methods used by Puerto Rican farmers for generations.
+                    </p>
+                    <p class="text-lg text-[#5E6D68] mb-4 leading-relaxed">
+                        Fresh herbs, vegetables, and fruits are harvested daily and delivered directly to our kitchen, ensuring peak flavor and nutritional value in every dish.
+                    </p>
+                    <p class="text-lg text-[#5E6D68] mb-6 leading-relaxed">
+                        We also partner with local farmers who share our commitment to sustainable, organic practices, supporting Puerto Rico's agricultural community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto text-center content-section">
+            <h2 class="text-5xl mb-4 text-[#1a2a24]">Private Events & Celebrations</h2>
+            <div class="divider"></div>
+            <p class="text-xl text-[#5E6D68] mb-16 max-w-3xl mx-auto">
+                Host your special occasion in our magical garden setting. From intimate gatherings to grand celebrations, we create unforgettable experiences with live music, exceptional cuisine, and our legendary hospitality.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="p-8 bg-[#F7F5F2] rounded-sm">
+                    <div class="text-4xl mb-4 text-[#D4AF37]">♪</div>
+                    <h3 class="text-2xl mb-3 text-[#1a2a24]">Live Music</h3>
+                    <p class="text-[#5E6D68]">Enjoy authentic Puerto Rican music performances that complement your dining experience.</p>
+                </div>
+
+                <div class="p-8 bg-[#F7F5F2] rounded-sm">
+                    <div class="text-4xl mb-4 text-[#D4AF37]">❦</div>
+                    <h3 class="text-2xl mb-3 text-[#1a2a24]">Weddings</h3>
+                    <p class="text-[#5E6D68]">Create lasting memories in our enchanting garden surrounded by history and nature.</p>
+                </div>
+
+                <div class="p-8 bg-[#F7F5F2] rounded-sm">
+                    <div class="text-4xl mb-4 text-[#D4AF37]">✦</div>
+                    <h3 class="text-2xl mb-3 text-[#1a2a24]">Corporate Events</h3>
+                    <p class="text-[#5E6D68]">Impress clients and colleagues with an extraordinary venue and culinary experience.</p>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <a href="#contact" class="btn-gold mr-4 mb-4 md:mb-0">Inquire About Events</a>
+                <a href="#contact" class="btn-outline">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Reservations Section -->
+    <section id="contact" class="py-24 px-6 md:px-12 bg-[#1a2a24] text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 content-section">
+                <div>
+                    <h2 class="text-5xl mb-4">Visit Us</h2>
+                    <div class="divider mx-0 bg-[#D4AF37]"></div>
+
+                    <div class="space-y-6 text-[#EAE0D5] text-lg">
+                        <div>
+                            <h3 class="text-2xl text-white mb-2 font-light">Location</h3>
+                            <p>Paseo de la Princesa</p>
+                            <p>Old San Juan, PR 00901</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-2xl text-white mb-2 font-light">Contact</h3>
+                            <p>Phone: <a href="tel:787-723-7878" class="text-[#D4AF37] hover:underline">787-723-7878</a></p>
+                            <p>Email: <a href="mailto:princesapr@zaprici.com" class="text-[#D4AF37] hover:underline">princesapr@zaprici.com</a></p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-2xl text-white mb-2 font-light">Hours</h3>
+                            <p>Tuesday - Sunday: 5:00 PM - 11:00 PM</p>
+                            <p>Monday: Closed</p>
+                            <p class="text-sm mt-2 text-[#5E6D68]">Hours may vary during holidays</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-2xl text-white mb-2 font-light">Follow Us</h3>
+                            <a href="https://www.facebook.com/princesacocinacultura/" target="_blank" class="inline-flex items-center text-[#D4AF37] hover:text-white transition-colors">
+                                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                Facebook
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-5xl mb-4">Reservations</h2>
+                    <div class="divider mx-0 bg-[#D4AF37]"></div>
+                    <p class="text-lg text-[#EAE0D5] mb-8">
+                        Reserve your table for an unforgettable dining experience. We recommend booking in advance, especially for weekend evenings and special events.
+                    </p>
+
+                    <div class="space-y-4">
+                        <a href="tel:787-723-7878" class="btn-gold block text-center w-full md:w-auto">
+                            Call to Reserve: 787-723-7878
+                        </a>
+                        <a href="mailto:princesapr@zaprici.com?subject=Reservation Inquiry" class="btn-outline block text-center w-full md:w-auto">
+                            Email Reservation Request
+                        </a>
+                    </div>
+
+                    <div class="mt-12 p-6 bg-[rgba(234,224,213,0.1)] rounded-sm">
+                        <h3 class="text-2xl mb-4 text-white font-light">Newsletter</h3>
+                        <p class="text-[#EAE0D5] mb-4">Stay updated on special events, new menu items, and exclusive offers.</p>
+                        <form class="flex flex-col sm:flex-row gap-3" onsubmit="return handleNewsletter(event)">
+                            <input type="email" placeholder="Your email address" class="flex-1" required>
+                            <button type="submit" class="btn-gold">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0f1812] text-[#EAE0D5] py-12 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="./assets/image_2.png" alt="Princesa Logo" class="h-16 mb-4">
+                    <p class="text-sm text-[#5E6D68]">
+                        Authentic 19th-century Puerto Rican cuisine in the heart of Old San Juan.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-lg mb-4 text-white font-light">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#story" class="hover:text-[#D4AF37] transition-colors">Our Story</a></li>
+                        <li><a href="#menu" class="hover:text-[#D4AF37] transition-colors">Menu</a></li>
+                        <li><a href="#rum" class="hover:text-[#D4AF37] transition-colors">Rum Library</a></li>
+                        <li><a href="#events" class="hover:text-[#D4AF37] transition-colors">Events</a></li>
+                        <li><a href="#contact" class="hover:text-[#D4AF37] transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg mb-4 text-white font-light">Connect</h4>
+                    <p class="text-sm mb-2">Paseo de la Princesa<br>Old San Juan, PR 00901</p>
+                    <p class="text-sm mb-2">Phone: <a href="tel:787-723-7878" class="hover:text-[#D4AF37]">787-723-7878</a></p>
+                    <p class="text-sm mb-4">Email: <a href="mailto:princesapr@zaprici.com" class="hover:text-[#D4AF37]">princesapr@zaprici.com</a></p>
+                </div>
+            </div>
+
+            <div class="border-t border-[#1a2a24] pt-8 text-center text-sm text-[#5E6D68]">
+                <p>&copy; 2025 Princesa - Cocina Cultura. All rights reserved. | Crafted with passion for Puerto Rico's heritage.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section, .grid-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Newsletter form handler
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert('Thank you for subscribing! We\'ll keep you updated on special events and offers.');
+            event.target.reset();
+            return false;
+        }
+
+        // Canvas-based Botanical Particle System
+        const canvas = document.getElementById('botanicalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = document.body.scrollHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = document.body.scrollHeight;
+        });
+
+        // Update canvas height on scroll (for long pages)
+        let resizeTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (canvas.height < document.body.scrollHeight) {
+                    canvas.height = document.body.scrollHeight;
+                }
+            }, 100);
+        });
+
+        class BotanicalParticle {
+            constructor() {
+                this.reset();
+                // Start with random positions across the screen
+                this.y = Math.random() * canvas.height;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 5 + 3;
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.speedY = Math.random() * 0.6 + 0.3;
+                this.opacity = Math.random() * 0.4 + 0.3;
+
+                // Botanical colors inspired by leaves and petals
+                const colors = [
+                    '#9CAF88',  // sage green
+                    '#A8B89F',  // light green
+                    '#8B9D83',  // muted green
+                    '#C8B8A8',  // beige
+                    '#D4C5B9'   // light brown
+                ];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+
+                // Wave motion parameters
+                this.waveAmplitude = Math.random() * 20 + 10;
+                this.waveFrequency = Math.random() * 0.02 + 0.01;
+                this.waveOffset = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+
+                // Wave motion for natural floating effect
+                this.x += this.speedX + Math.sin(this.y * this.waveFrequency + this.waveOffset) * 0.3;
+
+                // Reset if particle goes off screen
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+
+                if (this.x < -20 || this.x > canvas.width + 20) {
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+
+                // Draw leaf-like shape
+                ctx.beginPath();
+
+                // Organic leaf shape
+                ctx.moveTo(0, -this.size);
+                ctx.bezierCurveTo(
+                    this.size * 0.7, -this.size * 0.7,
+                    this.size * 0.7, 0,
+                    0, this.size
+                );
+                ctx.bezierCurveTo(
+                    -this.size * 0.7, 0,
+                    -this.size * 0.7, -this.size * 0.7,
+                    0, -this.size
+                );
+
+                ctx.closePath();
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                // Add subtle stroke for definition
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        // Create particles - 60 for good coverage without overwhelming
+        const particles = [];
+        for (let i = 0; i < 60; i++) {
+            particles.push(new BotanicalParticle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
